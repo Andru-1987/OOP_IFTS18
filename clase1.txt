@@ -48,3 +48,13 @@ Herencia
 Objetos y clases
 
 
+
+
+
+Diagramas estructurales y de comportamiento
+
+Diagramas Estructurales
+Diagramas importantes -> diagrama de classes -> Despliege -> Paquetes
+
+
+Diagramas de Clases
