@@ -37,9 +37,9 @@ Modularidad
 
 Polimorfismo
 	El polimorfismo permite que distintos objetos pertenecientes a una misma clase respondan  de diferentes formas a un mismo mensaje
-		Sobrecarga: El más conocido y se aplica cuando existen funciones con el mismo nombre en clases que son completamente independientes una de la otra.
-			Paramétrico: Existen funciones con el mismo nombre pero se usan diferentes parámetros (nombre o tipo). Se selecciona el método dependiendo del tipo de datos que se envíe.
-				Inclusión: Es cuando se puede llamar a un método sin tener que conocer su tipo, así no se toma en cuenta los detalles de las clases especializadas, utilizando una interfaz común
+	Sobrecarga: El más conocido y se aplica cuando existen funciones con el mismo nombre en clases que son completamente independientes una de la otra.
+		Paramétrico: Existen funciones con el mismo nombre pero se usan diferentes parámetros (nombre o tipo). Se selecciona el método dependiendo del tipo de datos que se envíe.
+	Inclusión: Es cuando se puede llamar a un método sin tener que conocer su tipo, así no se toma en cuenta los detalles de las clases especializadas, utilizando una interfaz común
 
 Herencia
 	heredar atributos y metodos
@@ -49,12 +49,21 @@ Objetos y clases
 
 
 
-
-
 Diagramas estructurales y de comportamiento
 
 Diagramas Estructurales
 Diagramas importantes -> diagrama de classes -> Despliege -> Paquetes
 
-
 Diagramas de Clases
+
+Comportamientos -> métodos
+Estado->atributos
+
+
+------------ Tarea: 
+		Realizar un diagrama UML sobre una gestión de ventas.
+
+------------ Tarea entregada.
+
+
+
