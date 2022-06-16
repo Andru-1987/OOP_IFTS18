@@ -70,7 +70,9 @@ class EmpleadoTemp(Empleado):
         return super().__str__() + "\nEmpleado Temp"
 
     def __dict__(self):
-        return {"nombre": super().get_nombre(),
+        return {
+                "id":super().get_id(),
+                "nombre": super().get_nombre(),
                 "apellido":self.apellido,
                 "dni": super().get_dni(),
                 "status":self.get_status(),
@@ -86,6 +88,9 @@ class EmpleadoTemp(Empleado):
 
 class EmpleadoFijo(Empleado):
     __status = "fijo"
+    __extras = 0
+    __cant_horas = 0
+    __valor_hora = 0
     
     def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
         super().__init__(nombre,dni,apellido,puesto,area)
@@ -102,7 +107,7 @@ class EmpleadoFijo(Empleado):
         return self.__extras
 
     def calcular_sueldo(self):
-        return self.__extras + super().get_sueldo()
+        return self.get_extras() + super().get_sueldo()
 
     def get_valor_hora(self):
         return self.__valor_hora
@@ -119,14 +124,15 @@ class EmpleadoFijo(Empleado):
 
 
     def __dict__(self):
-        return {"nombre": super().get_nombre(),
+        return {"id":super().get_id(),
+                "nombre": super().get_nombre(),
                 "apellido":self.apellido,
                 "dni": super().get_dni(),
                 "status":self.get_status(),
                 "puesto":self.puesto,
                 "area": self.area,
                 "sueldo":super().get_sueldo(),
-                "sueldo_total": self.calcular_salario(),
+                "sueldo_total": self.calcular_sueldo(),
                 "horas":None,
                 "valor_hora": None,
                 "cantidad_horas_extras":self.get_cant_horas(),
@@ -134,3 +140,22 @@ class EmpleadoFijo(Empleado):
                 }
 
 
+
+
+
+
+
+empleado = EmpleadoTemp("Anderson",93940198,"Ocana")
+
+print(empleado.get_sueldo())
+
+print(empleado.get_nombre())
+
+empleado.set_precio_horas(40,1000)
+
+print(empleado.get_sueldo())
+
+
+print(empleado.calcular_sueldo())
+
+print(json.dumps(empleado.__dict__(),indent=1))
