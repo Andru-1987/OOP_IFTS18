@@ -3,6 +3,7 @@ from uuid import uuid4
 class Persona:
   def __init__(self,nombre,dni,apellido):
       self.__id = uuid4().hex
+      self.__dni = dni
       self.__nombre = nombre
       self.apellido =apellido
       print(f"Usuario ID {self.get_id()} ha sido exitosamente creado")
@@ -10,6 +11,9 @@ class Persona:
   def get_nombre(self):
       return self.__nombre
 
+  def get_dni(self):
+    return self.__dni
+    
   def get_id(self):
       return self.__id
 
@@ -62,6 +66,13 @@ class EmpleadoTemp(Empleado):
   def __str__(self):
     return super().__str__() + "\nEmpleado Temp"
 
+  def __dict__(self):
+    return {"nombre":super().nombre,
+            "apellido": super().dni,
+            "puesto":super().puesto,
+            "area": super().area,
+            "sueldo":super().get_sueldo()}
+
 
 class EmpleadoFijo(Empleado):
   def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
@@ -90,11 +101,22 @@ class EmpleadoFijo(Empleado):
   def __str__(self):
     return super().__str__() + "\nEmpleado Fijo"
 
+  def __dict__(self):
+    return {"nombre": super().get_nombre(),
+            "apellido": super().dni,
+            "puesto":super().puesto,
+            "area": super().area,
+            "sueldo":super().get_sueldo(),
+            "salario_total": self.calcular_salario()
+            }
+
 
 
 empleado = EmpleadoFijo("Anderson",93940198,"Ocaña")
 
 print(empleado.get_sueldo())
+
+print(empleado.nombre)
 
 empleado.set_sueldo_base(80_000)
 
@@ -103,3 +125,6 @@ print(empleado.get_sueldo())
 empleado.set_horas_extras(10)
 
 print(empleado.calcular_salario())
+
+
+# print(empleado.__dict__())
