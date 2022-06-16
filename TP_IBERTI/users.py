@@ -1,130 +1,136 @@
 from uuid import uuid4
 
 class Persona:
-  def __init__(self,nombre,dni,apellido):
-      self.__id = uuid4().hex
-      self.__dni = dni
-      self.__nombre = nombre
-      self.apellido =apellido
-      print(f"Usuario ID {self.get_id()} ha sido exitosamente creado")
+    def __init__(self,nombre,dni,apellido):
+        self.__id = uuid4().hex
+        self.__dni = dni
+        self.__nombre = nombre
+        self.apellido =apellido
+        print(f"Usuario ID {self.get_id()} ha sido exitosamente creado")
 
-  def get_nombre(self):
-      return self.__nombre
+    def get_nombre(self):
+        return self.__nombre
 
-  def get_dni(self):
-    return self.__dni
-    
-  def get_id(self):
-      return self.__id
+    def get_dni(self):
+        return self.__dni
 
-  def __str__(self):
-      pass
+    def get_id(self):
+        return self.__id
 
 
 class Empleado(Persona):
-  __sueldo = None
+    __sueldo = None
 
-  def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
-    super().__init__(nombre,dni,apellido)
-    self.puesto = puesto
-    self.area = area
-    
+    def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
+        super().__init__(nombre,dni,apellido)
+        self.puesto = puesto
+        self.area = area
 
-  def get_sueldo(self):
-    if(self.__sueldo != None):
-      print(f"Sueldo base {self.__sueldo}")
 
-    return self.__sueldo
+    def get_sueldo(self):
+        if(self.__sueldo != None):
+            print(f"Sueldo base {self.__sueldo}")
 
-  def set_sueldo(self,sueldo):
-    self.__sueldo = sueldo
+        return self.__sueldo
 
-  def get_area(self):
-    print(f"Area: {self.area}")
-    return self.area
+    def set_sueldo(self,sueldo):
+        self.__sueldo = sueldo
 
-  def __str__(self):
-    return f"ID: {super().get_id()}\nNombre: {super().get_nombre()}\nArea: {self.area}\n{self.get_sueldo()} pesos"
+    def get_area(self):
+        print(f"Area: {self.area}")
+        return self.area
+
+    def __str__(self):
+        return f"ID: {super().get_id()}\nNombre: {super().get_nombre()}\nArea: {self.area}\n{self.get_sueldo()} pesos"
 
 
 
 
 class EmpleadoTemp(Empleado):
-  
-  def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
-    super().__init__(nombre,dni,apellido,puesto,area)
+    __status = "temporal"
+    cant_horas = 0
+    valor_hora = 0
+    
+    def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
+        super().__init__(nombre,dni,apellido,puesto,area)
 
-  def set_precio_horas(self,precio_hora = 1_000,cant_horas = 20):
-    self.cant_horas = cant_horas
-    self.precio_hora = precio_hora
-    valor_final = self.precio_hora * self.cant_horas
-    super().set_sueldo(valor_final)
+    def set_precio_horas(self, cant_horas = 20, valor_hora = 1_000):
+        self.cant_horas = cant_horas
+        self.valor_hora = valor_hora
+        valor_final = self.valor_hora * self.cant_horas
+        super().set_sueldo(valor_final)
 
-  def get_sueldo(self):
-    return super().get_sueldo()
+    def calcular_sueldo(self):
+        return super().get_sueldo()
+    
+    def get_status(self):
+        return self.__status
 
-  def __str__(self):
-    return super().__str__() + "\nEmpleado Temp"
+    def __str__(self):
+        return super().__str__() + "\nEmpleado Temp"
 
-  def __dict__(self):
-    return {"nombre":super().nombre,
-            "apellido": super().dni,
-            "puesto":super().puesto,
-            "area": super().area,
-            "sueldo":super().get_sueldo()}
-
+    def __dict__(self):
+        return {"nombre": super().get_nombre(),
+                "apellido":self.apellido,
+                "dni": super().get_dni(),
+                "status":self.get_status(),
+                "puesto":self.puesto,
+                "area": self.area,
+                "sueldo":super().get_sueldo(),
+                "sueldo_total": self.calcular_sueldo(),
+                "horas":self.cant_horas,
+                "valor_hora":self.valor_hora,
+                "cantidad_horas_extras":None,
+                "valor_hora_extras":None
+                }
 
 class EmpleadoFijo(Empleado):
-  def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
-    super().__init__(nombre,dni,apellido,puesto,area)
-
-  def set_sueldo_base(self, sueldo_base = 50_000):
-    super().set_sueldo(sueldo_base)
-
-  def set_horas_extras(self,cant_horas = 0,valor_hora = 1_000):
-    self.__valor_hora = valor_hora
-    self.__cant_horas = cant_horas
-    self.__extras = self.get_valor_hora() * self.get_cant_horas()  
-  
-  def get_extras(self):
-    return self.__extras
-
-  def calcular_salario(self):
-    return self.__extras + super().get_sueldo()
-
-  def get_valor_hora(self):
-    return self.__valor_hora
-
-  def get_cant_horas(self):
-    return self.__cant_horas
+    __status = "fijo"
     
-  def __str__(self):
-    return super().__str__() + "\nEmpleado Fijo"
+    def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
+        super().__init__(nombre,dni,apellido,puesto,area)
 
-  def __dict__(self):
-    return {"nombre": super().get_nombre(),
-            "apellido": super().dni,
-            "puesto":super().puesto,
-            "area": super().area,
-            "sueldo":super().get_sueldo(),
-            "salario_total": self.calcular_salario()
-            }
+    def set_sueldo_base(self, sueldo_base = 50_000):
+        super().set_sueldo(sueldo_base)
+
+    def set_horas_extras(self,cant_horas = 0,valor_hora = 1_000):
+        self.__valor_hora = valor_hora
+        self.__cant_horas = cant_horas
+        self.__extras = self.get_valor_hora() * self.get_cant_horas()  
+
+    def get_extras(self):
+        return self.__extras
+
+    def calcular_sueldo(self):
+        return self.__extras + super().get_sueldo()
+
+    def get_valor_hora(self):
+        return self.__valor_hora
+
+    def get_cant_horas(self):
+        return self.__cant_horas
+    
+    def get_status(self):
+        return self.__status
+
+    
+    def __str__(self):
+        return super().__str__() + "\nEmpleado Fijo"
 
 
+    def __dict__(self):
+        return {"nombre": super().get_nombre(),
+                "apellido":self.apellido,
+                "dni": super().get_dni(),
+                "status":self.get_status(),
+                "puesto":self.puesto,
+                "area": self.area,
+                "sueldo":super().get_sueldo(),
+                "sueldo_total": self.calcular_salario(),
+                "horas":None,
+                "valor_hora": None,
+                "cantidad_horas_extras":self.get_cant_horas(),
+                "valor_hora_extras":self.get_valor_hora()
+                }
 
-empleado = EmpleadoFijo("Anderson",93940198,"Ocaña")
 
-print(empleado.get_sueldo())
-
-print(empleado.nombre)
-
-empleado.set_sueldo_base(80_000)
-
-print(empleado.get_sueldo())
-
-empleado.set_horas_extras(10)
-
-print(empleado.calcular_salario())
-
-
-# print(empleado.__dict__())
