@@ -33,10 +33,11 @@ class NominaSector():
         puesto = (input("Ingrese puesto\t")).lower() or None
 
         if(data != "temporal"):
-            salario_base = float(input("Salario Base : ") or 0)
+            salario_base = float(input("Salario Base : ") or 0) 
             selector = (input("Cuenta con horas extras? SI or No")).lower() or "no"
             
             empleado = EmpleadoFijo(nombre,dni,apellido,puesto,self.area)
+            empleado.set_sueldo(salario_base)
 
             if (selector == "s" or selector =="si"):
                 cant_horas = float(input("Ingrese cantidad de horas \t")) or None
@@ -49,7 +50,7 @@ class NominaSector():
             empleado = EmpleadoTemp(nombre,dni,apellido,puesto,self.area)
             empleado.set_precio_horas(horas,valor)
             
-        self.empleados.append(empleado)
+        self.empleados.append(empleado.__dict__())
         return 1
 
 
@@ -65,4 +66,3 @@ sector.add_empleado()
 
 
 print(sector.empleados)
-
