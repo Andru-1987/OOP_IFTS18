@@ -28,9 +28,6 @@ class Empleado(Persona):
 
 
     def get_sueldo(self):
-        if(self.__sueldo != None):
-            print(f"Sueldo base {self.__sueldo}")
-
         return self.__sueldo
 
     def set_sueldo(self,sueldo):
@@ -44,14 +41,22 @@ class Empleado(Persona):
         return f"ID: {super().get_id()}\nNombre: {super().get_nombre()}\nArea: {self.area}\n{self.get_sueldo()} pesos"
 
 
-
+    def __dict__(self):
+        return {
+                "id":super().get_id(),
+                "nombre": super().get_nombre(),
+                "apellido":self.apellido,
+                "dni": super().get_dni(),
+                "status":self.get_status(),
+                "puesto":self.puesto,
+                "area": self.area}
 
 class EmpleadoTemp(Empleado):
     __status = "temporal"
     cant_horas = 0
     valor_hora = 0
     
-    def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
+    def __init__(self,nombre,apellido,dni,puesto = "cadete",area = "unknow"):
         super().__init__(nombre,dni,apellido,puesto,area)
 
     def set_precio_horas(self, cant_horas = 20, valor_hora = 1_000):
@@ -70,21 +75,16 @@ class EmpleadoTemp(Empleado):
         return super().__str__() + "\nEmpleado Temp"
 
     def __dict__(self):
-        return {
-                "id":super().get_id(),
-                "nombre": super().get_nombre(),
-                "apellido":self.apellido,
-                "dni": super().get_dni(),
-                "status":self.get_status(),
-                "puesto":self.puesto,
-                "area": self.area,
-                "sueldo":super().get_sueldo(),
+        data = {"sueldo":super().get_sueldo(),
                 "sueldo_total": self.calcular_sueldo(),
                 "horas":self.cant_horas,
                 "valor_hora":self.valor_hora,
                 "cantidad_horas_extras":None,
                 "valor_hora_extras":None
                 }
+        
+        return {**super().__dict__(),**data}
+    
 
 class EmpleadoFijo(Empleado):
     __status = "fijo"
@@ -92,7 +92,7 @@ class EmpleadoFijo(Empleado):
     __cant_horas = 0
     __valor_hora = 0
     
-    def __init__(self,nombre,dni,apellido,puesto = "cadete",area = "unknow"):
+    def __init__(self,nombre,apellido,dni,puesto = "cadete",area = "unknow"):
         super().__init__(nombre,dni,apellido,puesto,area)
 
     def set_sueldo_base(self, sueldo_base = 50_000):
@@ -124,38 +124,11 @@ class EmpleadoFijo(Empleado):
 
 
     def __dict__(self):
-        return {"id":super().get_id(),
-                "nombre": super().get_nombre(),
-                "apellido":self.apellido,
-                "dni": super().get_dni(),
-                "status":self.get_status(),
-                "puesto":self.puesto,
-                "area": self.area,
-                "sueldo":super().get_sueldo(),
-                "sueldo_total": self.calcular_sueldo(),
-                "horas":None,
-                "valor_hora": None,
-                "cantidad_horas_extras":self.get_cant_horas(),
-                "valor_hora_extras":self.get_valor_hora()
-                }
-
-
-
-
-
-
-
-empleado = EmpleadoTemp("Anderson",93940198,"Ocana")
-
-print(empleado.get_sueldo())
-
-print(empleado.get_nombre())
-
-empleado.set_precio_horas(40,1000)
-
-print(empleado.get_sueldo())
-
-
-print(empleado.calcular_sueldo())
-
-print(json.dumps(empleado.__dict__(),indent=1))
+        data={"sueldo":super().get_sueldo(),
+              "sueldo_total": self.calcular_sueldo(),
+              "horas":None,
+              "valor_hora": None,
+              "cantidad_horas_extras":self.get_cant_horas(),
+              "valor_hora_extras":self.get_valor_hora()
+             }
+        return {**super().__dict__(),**data}
