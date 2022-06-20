@@ -1,6 +1,7 @@
 class Gestionador:
     
-    def gestionar_empleados(empleados,**kwargs):
+    def gestionar_empleados(self, empleados,**kwargs):
+        
         import json
         init_len = len(empleados)
         key= None
