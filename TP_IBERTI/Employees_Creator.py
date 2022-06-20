@@ -18,7 +18,7 @@ class Employees:
             salario_base = float(input("Salario Base : ") or 0) 
             selector = (input("Cuenta con horas extras? SI or No")).lower() or "no"
             
-            empleado = EmpleadoFijo(nombre,dni,apellido,puesto,area)
+            empleado = EmpleadoFijo(nombre,apellido,dni,puesto,area)
             empleado.set_sueldo(salario_base)
 
             if (selector == "s" or selector =="si"):
@@ -29,14 +29,16 @@ class Employees:
         else:
             horas = float(input("Horas realizadas: ") or 0)
             valor = float(input("Valor por hora : ") or 0)
-            empleado = EmpleadoTemp(nombre,dni,apellido,puesto,area)
+            empleado = EmpleadoTemp(nombre,apellido,dni,puesto,area)
             empleado.set_precio_horas(horas,valor)
             
         return [empleado.__dict__()]
     
     def add_by_csv(self,path:str)->list:
-        import csv
+        import pandas as pd
         
-        with open(path) as data:
-            employees = [{k: str(v) for k, v in row.items()} for row in csv.DictReader(data, skipinitialspace=True)]
-        return employees
+        if path != None:
+            employees = pd.read_csv(path).to_dict('records')
+            return employees
+        else: 
+            print("No data")
