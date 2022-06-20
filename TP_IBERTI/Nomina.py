@@ -20,11 +20,7 @@ class NominaSector():
 
         else:
             self.area = area
-            
             self.jefe_area = None if jefe_area != None else jefe_area
-            
-            print("Se ha creado exitosamente")
-    
     
     def add_empleado(self, employees):
         import json
@@ -34,22 +30,22 @@ class NominaSector():
         
         while option != None:
             if option =="1":
-                print("******************************************************")
+                print("**************************************************************************")
                 path = input("Indique la ruta:\t")
-                self.empleados += employees.add_by_csv(path)
+                if path != None:
+                    self.empleados += employees.add_by_csv(path)
                 
             elif option == "2":
-                print("******************************************************")
+                print("**************************************************************************")
                 print("Carga manual")
                 self.empleados += employees.add_manually()
             else:
                 break
-            print("Desea ingresar nuevos usuarios?\n1: CSV\n2: Manual")
+            print("Desea ingresar nuevos usuarios?\n1: CSV\n2: Manual\nPor default se cancela")
             option =  input() or None
         else:
-            print("Opcion no valida, no se genera Carga")
-            
-        print(self.empleados)
+            print("Generacion de Carga Exitosa")
+
 
     def gestion(self, gestionador): 
         
@@ -58,53 +54,77 @@ class NominaSector():
         input_dict[key] = input("Ingrese valor de búsqueda: ")
         
         self.empleados = gestionador.gestionar_empleados(self.empleados, **input_dict)
-    
-    
-    def carga_nomina(self):
-        contador = 0
-        verificar = (input("Desea ingresar un empleado? \"Si\" o \"No\"")).lower() or "s"
-        while verificar not in ["n","no"]:
-            self.add_empleado()
-            contador+=1
-            verificar = (input("Desea ingresar un empleado? \"Si\" o \"No\"")).lower() or "s"
-        else:
-            print(f"Termino la carga de {contador} empleados")
-            
+        
+           
     def calcular_nomina_general(self):
+        
         if len(self.empleados) != 0:
             print("Mostramos toda la nomina separada por nomina fija y temporal")
-            nomina_fija = 0
-            nomina_temporal = 0
-            for empleado in self.empleados:
-                print(f'Nombre del empleado: {empleado.get("nombre")}, sueldo = {empleado.get("sueldo_total",0)}')
-                self.total_nomina += empleado.get("sueldo_total",0)
-                if empleado.get("status") == "fijo":
-                    nomina_fija += empleado.get("sueldo_total", 0)
-                else:
-                    nomina_temporal += empleado.get("sueldo_total")
-            print(f"Total nomina Temporal {nomina_temporal}\tTotal nomina fija {nomina_temporal}")
-            print(f"Total Nomina = {self.total_nomina}")
         
+            nomina_fija = 0
+            count_fija = 0
+            
+            nomina_temporal = 0
+            count_temporal = 0
+            
+            count = 0
+            
+            for empleado in self.empleados:
+                self.total_nomina += empleado.get("sueldo_total",0)
+                
+                if empleado.get("status") == "fijo":
+                    count_fija += 1
+                    nomina_fija += empleado.get("sueldo_total", 0)
+                elif empleado.get("status") == "temporal":
+                    count_temporal += 1
+                    nomina_temporal += empleado.get("sueldo_total",0)
+                else:
+                    count += 1
+            print("\nLista empleados Temporal")
+            print("**************************************************************************")
+            for empleado in self.empleados:
+                if empleado.get("status") == "temporal":
+                    print(f'Nombre: {empleado.get("nombre")} Sueldo: $ {round(empleado.get("sueldo_total",0),2)}')
+            
+            print("\nLista empleados Fijo")
+            print("**************************************************************************")
+            for empleado in self.empleados:
+                if empleado.get("status") == "fijo":
+                    print(f'Nombre: {empleado.get("nombre")} Sueldo: $ {round(empleado.get("sueldo_total",0),2)}')
+                
+            print(f"\nCantidad total de usuarios temporales: {count_temporal} empleados")
+            print(f"Cantidad total de usuarios fijos: {count_fija} empleados")
+            print(f"Cantidad total de usuarios no definidos: {count} empleados")
+            
+            print(f"\nTotal nomina Temporal $ {round(nomina_temporal,2)}\nTotal nomina Fija $ {round(nomina_temporal,2)}")
+            print(f"Total Nomina $ {round(self.total_nomina,2)}")
+        else:
+            print("No hay nomina")
+                                    
         return self.total_nomina
 
             
     def listar_nomina(self):
+        
         if len(self.empleados) != 0:
             for empleado in self.empleados:
-                print(empleado)
-        return self.empleados
-                
-    def save_nomina(self):
-        time = datetime.now()
+                print(json.dumps(empleado, indent = 2))
+        else:
+            print("No existen empleados")
         
-        print(self.empleados)
+                
+    def save_nomina(self, nombre_archivo):
+        time = datetime.now()
         
         data_keys = None if len(self.empleados) == 0 else self.empleados[0].keys()
         
-        
-        name_file = time.strftime("%b_%d")+"_data.csv"
-        
         if data_keys is not None:
+                    
+            if nombre_archivo != "" or nombre_archivo is not None:
+                name_file = nombre_archivo +".csv"
+            else:
+                name_file = time.strftime("%b_%d")+"_data.csv"
+
             with open(name_file,"w",newline = "") as output:
                 dict_writer = csv.DictWriter(output,data_keys)
                 dict_writer.writeheader()
