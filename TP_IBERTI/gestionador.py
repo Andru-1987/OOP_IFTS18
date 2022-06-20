@@ -1,6 +1,6 @@
 class Gestionador:
     
-    def gestionar_empleados(self, empleados,**kwargs):
+    def gestionar_empleados(empleados,**kwargs):
         import json
         init_len = len(empleados)
         key= None
@@ -15,13 +15,10 @@ class Gestionador:
         key_list = empleados[0].keys() if len(empleados)!=0 else [] 
 
         if len(empleados) != 0 and (key in key_list):
-
             new_list =[empleado for empleado in empleados if empleado.get(key)==value]
-
             if len(new_list)!=0:
                 for empleado in new_list:
                     print( json.dumps(empleado ,indent = 1))
-
             else:
                 print("No existe ningún empleado con ese criterio de busqueda")
         else:
@@ -29,6 +26,7 @@ class Gestionador:
 
 
         print("Desea eliminar todos los elementos con esa criteria?\n\tOpcion 1\nDesea eliminar un registro en particular?\n\tOpcion 2\n\tPara ello hay que eliminar usando el ID Opcion 2")
+        
         opcion_in= input("Opcion por default \"CANCELA\"")
 
         if opcion_in == "1":
@@ -42,3 +40,5 @@ class Gestionador:
             return empleados
         else:
             print("Se cancela la operacion.")
+        
+        return empleados
