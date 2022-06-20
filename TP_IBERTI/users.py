@@ -132,3 +132,4 @@ class EmpleadoFijo(Empleado):
               "valor_hora_extras":float(self.get_valor_hora())
              }
         return {**super().__dict__(),**data}
+
